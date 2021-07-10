@@ -26,6 +26,27 @@ https://reactjs.org/docs/hooks-intro.html
 --Uncontrolled Components
 https://reactjs.org/docs/uncontrolled-components.html
 
+--Lists and Keys(React)
+https://reactjs.org/docs/lists-and-keys.html
 
+--Lifting State(React)
+https://reactjs.org/docs/lifting-state-up.html
+
+--CSS in JS:
+https://styled-components.com/
+https://github.com/styletron/styletron
+https://emotion.sh/docs/introduction
+https://www.styletron.org/react#props-filtering
+
+--
 
 *****************************************************************************************
+
+
+--React 
+
+
+
+
+
+
