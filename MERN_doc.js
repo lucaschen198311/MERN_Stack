@@ -60,6 +60,12 @@ https://github.com/axios/axios
 --Postman
 https://www.postman.com/downloads/
 
+--MongoDB(operator):
+https://docs.mongodb.com/manual/reference/operator/
+
+--Mongoose SchemaTypes
+https://mongoosejs.com/docs/schematypes.html
+
 
 *****************************************************************************************
 
@@ -1255,19 +1261,293 @@ module.exports = {
 cd C:\Program Files\MongoDB\Server\4.4\data\
 mongo.exe
 
+--basic commands:
+
+show dbs //show all dbs
+db //show current db
+use DB_NAME //switch to another db or create new db if no one exits
+db.dropDatabase() //delete db
+show collections
+db.createCollection("COLLECTION_NAME")
+db.COLLECTION_NAME.drop()
+db.COLLECTION_NAME.insert({YOUR_QUERY_DOCUMENT})
+db.COLLECTION_NAME.find({YOUR_QUERY_DOCUMENT}) //READ - Retrieving documents from a collection
+db.COLLECTION_NAME.find({}) //find all documents of the given collection   
+db.COLLECTION_NAME.find()	//find all documents of the given collection
+db.COLLECTION_NAME.find().pretty() //make query result look good in format
+db.COLLECTION_NAME.find({_id: ObjectId(".....")}) //find document by id
+db.COLLECTION_NAME.remove({YOUR_QUERY_DOCUMENT}, BOOLEAN) //BOOLEAN is optional with default false; The boolean is called the justOne boolean, and if it is present and it is true, the remove query will only remove the first document that matches the query. 
+db.COLLECTION_NAME.update({QUERY}, {FIELDS_TO_UPDATE}, {OPTIONS})  // Note: the options document is optional. update method will completely overwrite everything except the _id field.
+--Example of update:
+db.ninjas.update({name: "Trey"}, {$set: {location: "Mountain View"}}) // $set : update operator which will not overwrite the 1st param. 
+
+--Example(operators):
+
+db.dojos.find({number_of_students: {$gt: 15}})
+
+$gt (greater than)	//Use to query selectively on numerical-valued fields
+$gte (greater than or equal to)	//Use to query selectively on numerical-valued fields
+$lt (less than)	//Use to query selectively on numerical-valued fields
+$lte (less than or equal to)	//Use to query selectively on numerical-valued fields
+$in (in array)	//Use to find documents who have a particular value within an array.
+
+db.students.update({_id: ObjectId("5463d871a6a96d5ed6252f4d")}, {$push: {interests: 'snowboarding'}})
+
+$push	//Push to an array contained within a document.
+$pop	//Removes either the first or last element from an array.
+/*Ex:
+db.COLLECTION.update({QUERY}, {$pop: {array_key: (1 or -1)}})
+Use 1 for the last item in the array, -1 for the first item.
+*/
+
+$addToSet	//It functions just like $push.  However, $addToSet only adds to the specified array if the value doesn't already exist (thereby preventing duplicate entries).
+$pull	//Removes a specified value from an array, unlike $pop which removes by location in the array.
+/*Ex:
+db.COLLECTION.update({QUERY}, {$pull: {array_key: VALUE}})
+
+This will remove all instances of VALUE from the documents with the array specified by the array_key that match QUERY.
+*/
+
+
+-------Mongoose
+
+//Download the HelloMongoose boilerplate code and open in vs-code
+npm init -y
+npm install mongoose express
+
+//In any file that will use the Mongoose library, you will need to be sure to require it at the top of the file similar to this:
+const mongoose = require('mongoose');
+
+//navigate to the config folder where you will find the mongoose.config.js file where we use mongoose to connect to MongoDb
+const mongoose = require('mongoose');
+ 
+mongoose.connect('mongodb://localhost/name_of_your_DB', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+    .then(() => console.log('Established a connection to the database'))
+    .catch(err => console.log('Something went wrong when connecting to the database ', err));
+	
+//Note: If you connect to a database that doesn't exist, Mongoose will create the DB for you as soon as you create your first document!
+
+
+//navigate your way to the user.model.js file in the models folder where we create a User collection using mongoose
+const mongoose = require('mongoose');
+const UserSchema = new mongoose.Schema({
+    name: String,
+    age: Number
+});
+ 
+const User = mongoose.model('User', UserSchema);
+ 
+module.exports = User;
+
+//Navigate your way into the controllers folder where we will find the user.controller.js file that will house all of our logic for CURD:
+const User = require('../models/user.model');
+ 
+module.exports.findAllUsers = (req, res) => {
+    User.find()
+        .then(allDaUsers => res.json({ users: allDaUsers }))
+        .catch(err => res.json({ message: 'Something went wrong', error: err }));
+}
+ 
+module.exports.findOneSingleUser => (req, res) => {
+    User.findOne({ _id: req.params.id })
+        .then(oneSingleUser => res.json({ user: oneSingleUser }))
+        .catch(err => res.json({ message: 'Something went wrong', error: err }));
+}
+ 
+module.exports.createNewUser = (req, res) => {
+    User.create(req.body)
+        .then(newlyCreatedUser => res.json({ user: newlyCreatedUser }))
+        .catch(err => res.json({ message: 'Something went wrong', error: err }));
+}
+ 
+module.exports.updateExistingUser = (req, res) => {
+    User.findOneAndUpdate(
+        { _id: req.params.id },
+        req.body,
+        { new: true, runValidators: true }
+    )
+        .then(updatedUser => res.json({ user: updatedUser }))
+        .catch(err => res.json({ message: 'Something went wrong', error: err }));
+}
+ 
+module.exports.deleteAnExistingUser = (req, res) => {
+    User.deleteOne({ _id: req.params.id })
+        .then(result => res.json({ result: result }))
+        .catch(err => res.json({ message: 'Something went wrong', error: err }));
+}
+
+
+//Navigate your way into the routes folder where we will find the user.routes.js file that will be responsible for all of our routes dealing with the user model
+const UserController = require('../controllers/user.controller');
+ 
+module.exports = app => {
+    app.get('/api/users', UserController.findAllUsers);
+    app.get('/api/users/:id', UserController.findOneSingleUser);
+    app.put('/api/users/:id', UserController.updateExistingUser);
+    app.post('/api/users', UserController.createNewUser);
+    app.delete('/api/users/:id', UserController.deleteAnExistingUser); //Note:   Move specific routes to the top before ones with wildcard (like:id)
+}
+
+
+//Last but not least is our server.js file
+const express = require("express");
+const app = express();
+    
+require("./server/config/mongoose.config");
+    
+app.use(express.json(), express.urlencoded({ extended: true }));
+    
+const AllMyUserRoutes = require("./server/routes/user.routes");
+AllMyUserRoutes(app);
+    
+app.listen(8000, () => console.log("The server is all fired up on port 8000"));
+
+//run script
+nodemon server.js
+
+
+-----Common Mongoose Commands
+
+// Create a Schema for Users
+const UserSchema = new mongoose.Schema({
+ name: { type: String },
+ age: { type: Number }
+}, { timestamps: true })
+// create a constructor function for our model and store in variable 'User'
+const User = mongoose.model('User', UserSchema);
+
+// ...retrieve an array of all documents in the User collection
+User.find()
+    .then(users => {
+        // logic with users results
+    })
+    .catch(err => res.json(err));
+	
+// ...retrieve an array of documents matching the query object criteria
+User.find({name:'Jessica'}) 
+    .then(usersNamedJessica => {
+        // logic with usersNamedJessica results
+    })
+    .catch(err => res.json(err));
+	
+// ...retrieve 1 document (the first record found) matching the query object criteria
+User.findOne({_id: '5d34d361db64c9267ed91f73'})
+    .then(user => {
+        // logic with single user object result
+    })
+    .catch(err => res.json(err));
+	
+ // ...create a new document to store in the User collection and save it to the DB.
+const bob = new User(req.body);
+// req.body is an object containing all the users data.
+// if we look at req.body as an object literal it would look like this
+	/*
+     * req.body = {
+     *		"name": "Bob Ross",
+     *		"age": 42
+     *	}
+    **/
+bob.save()
+    .then(newUser => {
+        // logic with succesfully saved newUser object
+    })
+    .catch(err => res.json(err));
+ // If there's an error and the record was not saved, this (err) will contain validation errors.
+ 
+ 
+--or:
+
+// ...create a new document to store in the User collection and save it to the DB.
+const { userData } = req.body;
+User.create(userData)
+    .then(newUser => {
+        // logic with succesfully saved newUser object
+    })
+    .catch(err => res.json(err));
+ // If there's an error and the record was not saved, this (err) will contain validation errors.
+ 
+ 
+// ...delete all documents of the User collection
+User.remove()
+    .then(deletedUsers => {
+        // logic (if any) with successfully removed deletedUsers object
+    })
+    .catch(err => res.json(err));
+	
+// ...delete 1 document that matches the query object criteria
+User.remove({_id: '5d34d361db64c9267ed91f73'})
+    .then(deletedUser => {
+        // logic (if any) with successfully removed deletedUser object
+    })
+    .catch(err => res.json(err));
+	
+
+User.updateOne({name:'Bob Ross'}, {
+    name: 'Ross Bob',
+    $push: {pets: {name: 'Sprinkles', type: 'Chubby Unicorn' }}
+})
+    .then(result => {
+        // logic with result -- note this will be the original object by default!
+    })
+    .catch(err => res.json(err));
+	
+User.findOne({name: 'Bob Ross'})
+    .then(user => {
+        user.name = 'Rob Boss';
+        user.pets.push({name: 'Sprinkles', type: 'Chubby Unicorn'});
+        return user.save();
+    })
+    .then(saveResult => res.json(saveResult))
+    .catch(err => res.json(err));
+	
+User.exists({name: req.body.name})
+    .then(userExists => {
+        if (userExists) {
+            // Promise.reject() will activate the .catch() below.
+            return Promise.reject('Error Message Goes Here');
+        }
+        return User.create(req.body);
+    })
+    .then(saveResult => res.json(saveResult))
+    .catch(err => res.json(err));
+	
+
+
+-----Validation:
+
+const mongoose = require("mongoose");
+
+const UserSchema = new mongoose.Schema(
+  {
+    first_name: {
+      type: String,
+      required: [true, "First name is required"],
+      minlength: [6, "First name must be at least 6 characters long"]
+    },
+    last_name: {
+      type: String,
+      required: [true, "Last name is required"],
+      maxlength: [20, "Last name must be at least 6 characters long"]
+    },
+    age: {
+      type: Number,
+      min: [1, "You must be at least 1 or older to register"],
+      max: [150, "You must be at most 149 years old to register"]
+    },
+    email: { type: String, required: [true, "Email is required"] }
+  },
+  { timestamps: true }
+);
+
+const User = mongoose.model("User", UserSchema);
+
+module.exports = User;
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+----------------------------------------- Mongo DB -------------------------------------------
 
