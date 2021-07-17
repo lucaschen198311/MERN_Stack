@@ -21,10 +21,14 @@ const initialState = {
         };
     }
 
-    const ValidateEmail = (email)=>{
-        const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return reg.test(String(email).toLowerCase());
-    }
+    const ValidateEmail = (inputText)=>{
+            var mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+            if(inputText.value.match(mailformat)){
+                return true;
+            }else{
+                    return false;
+                }
+        }
 
     const Form = ()=>{
         const [state, dispatch] = useReducer(reducer, initialState);
@@ -59,8 +63,8 @@ const initialState = {
         const handleEmail = (e)=>{
             const { name, value } = e.target;
             let error;
-            console.log(String(value));
-            if(!ValidateEmail(value) && value.length>0){
+            console.log(value);
+            if(ValidateEmail(value) && value.length>0){
                 error = 'It is not a valid email address';
             }else{
                 error = null;
