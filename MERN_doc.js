@@ -66,8 +66,105 @@ https://docs.mongodb.com/manual/reference/operator/
 --Mongoose SchemaTypes
 https://mongoosejs.com/docs/schematypes.html
 
+--Material-UI 
+https://material-ui.com/
+
+--reactstrap
+https://reactstrap.github.io/
+
+--Semantic UI React
+https://react.semantic-ui.com/
 
 *****************************************************************************************
+
+-----------------------------------------JS/OOP-------------------------------------------
+
+class User {
+    constructor(username, emailAddress) {  // now our method has 2 parameters!        
+        this.name = username	           // and we use the values passed in to set the name attribute        
+        this.email = emailAddress	   // and the email attribute        
+        this.accountBalance = 0		   // the account balance is set to $0, so no need for a third parameter
+    }
+}
+
+const guido = new User("Guido van Rossum", "guido@python.com");
+const monty = new User("Monty Python", "monty@python.com");
+console.log(guido.name);	// output: Guido van Rossum
+console.log(monty.name);	// output: Monty Python
+
+class User {
+    constructor(username, emailAddress) {  // here's what we have so far       
+        this.name = username      
+        this.email = emailAddress  
+        this.accountBalance = 0
+    }
+    makeDeposit(amount) {                // takes a parameter this is the amount of the deposit
+        this.accountBalance += amount;   // the specific user's account increases by the amount of the value received
+    }
+}
+
+guido.makeDeposit(100)
+guido.makeDeposit(200)
+monty.makeDeposit(50)
+console.log(guido.accountBalance)	// output: 300
+console.log(monty.accountBalance)	// output: 50
+
+
+class User {
+    constructor(name, email) {
+        this.name = name;
+        this.email = email;
+        this.account = new BankAccount(intRate=0.02, balance=0);	// this is the NEW line
+    }
+	
+	exampleMethod() {
+        this.account.deposit(100)		// we can call the BankAccount instance's methods
+    	console.log(this.account.balance)       // or access its attributes
+    }
+}
+
+--inheritance: 
+//first the child class (the M5 class) will look at itself to see if it has that method. If not, it will work its way up the prototype chain to look for it:
+// parent Vehicle class
+class Vehicle {
+    constructor(manufacturer, model, color) {
+        this.manufacturer = manufacturer;
+        this.model = model;
+        this.color = color;
+        this.miles = 0;
+    }
+    drive() {
+        this.miles += 10;
+        console.log(`You drove your ${ this.model } and it now has ${this.miles} miles on it.`);
+    }
+    // simple method in the parent class
+    parentFunction(){
+        return "This is coming from the parent!";
+    }
+}
+// child M5 class
+class M5 extends Vehicle {
+    constructor(color) {
+        super("BMW", "M5", color);
+    }
+    // simple function in the child class
+    childFunction() {
+        // by using super, we can call the parent method
+        const message = super.parentFunction();
+        console.log(message);
+    }
+}
+const m5 = new M5("Blue");
+m5.childFunction();
+
+
+
+
+
+
+
+-----------------------------------------JS/OOP-------------------------------------------
+
 
 
 -----------------------------------------React-------------------------------------------
@@ -335,7 +432,7 @@ const UserForm = (props) => {
 				<h3>Welcome, please submit the form.</h3> 
 			}
             <div>
-                <label>Username: <label> 
+                <label>Username: </label> 
                 <input type="text" value={username} onChange={ (e) => setUsername(e.target.value) } />
             </div>
             <div>
@@ -1547,7 +1644,883 @@ const User = mongoose.model("User", UserSchema);
 module.exports = User;
 
 
+----Example(Nested Documents)
+
+const UserSchema = new mongoose.Schema({
+	fName: String,
+	lName: String,
+	friends: [UserSchema]
+})
+
+
+const UserSchema = new mongoose.Schema({
+	fName: String,
+	lName: String,
+	email: String,
+	password: String,
+	bankAccount: [BankAccountSchema]
+}, {timestamps: true})
+
+
+const BankAccountSchema = new mongoose.Schema({
+	accountType: {type: String, required: true}, 
+	balance: {type: Number, default: 0},
+	transactions: [TransactionSchema]
+}, 
+{timestamps: true})
+
+const TransactionSchema = new mongoose.Schema({
+	amount: {type: Number, required: true},
+	vendor: {type: String, required: true}
+}, {timestamps: {createdAt: true}})
 
 
 ----------------------------------------- Mongo DB -------------------------------------------
+
+
+
+-----------------------------------------Full Stack MERN---------------------------------------
+
+----creating our full stack MERN project
+
+mkdir myNewProject
+cd myNewProject
+mkdir server
+cd server
+touch server.js
+npm init -y
+npm install express
+npm install mongoose
+
+// within the server.js add the following code
+const express = require('express');
+const app = express();
+const port = 8000;
+    
+app.listen(port, () => console.log(`Listening on port: ${port}`) );
+
+//then making four more folders within server that are called "config", "controllers", "models" and "routes".
+
+cd ..
+npx create-react-app client //create a react project.  Make sure you are in the root folder level for your project.
+
+
+----Example(setup Full stack project)
+
+
+// controllers/person.controller.js
+module.exports.index = (request, response) => {
+    response.json({
+       message: "Hello World"
+    });
+}
+
+// routes/person.routes.js
+
+const PersonController = require('../controllers/person.controller');
+module.exports = function(app){
+    app.get('/api', PersonController.index);
+}
+
+// server.js
+const express = require('express');
+const cors = require('cors')    /* This is new */
+const app = express();
+app.use(cors())                 /* This is new */
+require('./routes/person.routes')(app);
+app.listen(8000, () => {
+    console.log("Listening at Port 8000")
+})
+
+
+//start setting up our React project; Change directories into your React project, called client, and run the following:
+
+npm install axios
+
+
+//client/src/views/Main.js
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+const Main = () => {
+    const [ message, setMessage ] = useState("Loading...")
+    useEffect(()=>{
+        axios.get("http://localhost:8000/api")
+            .then(res=>setMessage(res.data.message))       
+    }, []);
+    return (
+        <div>
+            <h2>Message from the backend: {message}</h2>
+        </div>
+    )
+}
+export default Main;
+
+
+//in your App.js file
+import React from 'react';
+import Main from './views/Main';
+function App() {
+  return (
+    <div className="App">
+      <Main />
+    </div>
+  );
+}
+export default App;
+
+
+//start your backend server via nodemon server.js and your React app via npm run start in two different consoles
+
+//make cross-origin requests
+npm install cors
+
+
+//In order to start a full stack MERN CRUD application: server/config/mongoose.config.js:
+const mongoose = require('mongoose');
+mongoose.connect("mongodb://localhost/crmdb", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+    .then(() => console.log("Established a connection to the database"))
+    .catch(err => console.log("Something went wrong when connecting to the database", err));
+	
+
+//server/models/person.model.js
+const mongoose = require('mongoose');
+const PersonSchema = new mongoose.Schema({
+    firstName: { type: String },
+    lastName: { type: String }
+}, { timestamps: true });
+module.exports = mongoose.model('Person', PersonSchema);
+
+
+//server/controllers/person.controller.js
+const Person = require('../models/person.model');    /* this is new */
+module.exports.index = (request, response) => {
+    response.json({
+        message: "Hello World"
+    });
+}
+          /* The method below is new */
+module.exports.getAllPeople = (request, response) => {
+    Person.find({})
+        .then(persons => response.json(persons))
+        .catch(err => response.json(err))
+}
+
+module.exports.createPerson = (request, response) => {
+    const { firstName, lastName } = request.body;
+    Person.create({
+        firstName,
+        lastName
+    })
+        .then(person => response.json(person))
+        .catch(err => response.json(err));
+}
+
+module.exports.getPerson = (request, response) => {
+    Person.findOne({_id:request.params.id})
+        .then(person => response.json(person))
+        .catch(err => response.json(err))
+}
+
+module.exports.updatePerson = (request, response) => {
+    Person.findOneAndUpdate({_id: request.params.id}, request.body, {new:true})
+        .then(updatedPerson => response.json(updatedPerson))
+        .catch(err => response.json(err))
+}
+
+module.exports.deletePerson = (request, response) => {
+    Person.deleteOne({ _id: request.params.id })
+        .then(deleteConfirmation => response.json(deleteConfirmation))
+        .catch(err => response.json(err))
+}
+
+//update routes in routes/person.routes.js:
+const PersonController = require('../controllers/person.controller');
+module.exports =(app) => {
+    app.get('/api', PersonController.index);
+	app.get('/api/people', PersonController.getAllPeople);
+	app.get('/api/people/:id', PersonController.getPerson);
+    app.post('/api/people', PersonController.createPerson);     /* This is new */
+	app.put('/api/people/:id', PersonController.updatePerson);
+	app.delete('/api/people/:id', PersonController.deletePerson);
+	
+}
+
+//server/server.js:
+const express = require('express');
+const cors = require('cors');
+const app = express();
+require('./config/mongoose.config');               /* This is new */
+app.use(cors());
+app.use(express.json());                           /* This is new */
+app.use(express.urlencoded({ extended: true }));   /* This is new */
+require('./routes/person.routes')(app);
+app.listen(8000, () => {
+    console.log("Listening at Port 8000")
+})
+
+
+//tie in the creation to React project: client/src/components/PersonForm.js
+
+import React, { useState } from 'react'
+import axios from 'axios';
+const PersonForm = () => {
+    //keep track of what is being typed via useState hook
+    const [firstName, setFirstName] = useState(""); 
+    const [lastName, setLastName] = useState("");
+    //handler when the form is submitted
+    const onSubmitHandler = e => {
+        //prevent default behavior of the submit
+        e.preventDefault();
+        //make a post request to create a new person
+        axios.post('http://localhost:8000/api/people', {
+            firstName,    // this is shortcut syntax for firstName: firstName,
+            lastName      // this is shortcut syntax for lastName: lastName
+        })
+            .then(res=>console.log(res))
+            .catch(err=>console.log(err))
+    }
+    //onChange to update firstName and lastName
+    return (
+        <form onSubmit={onSubmitHandler}>
+            <p>
+                <label>First Name</label><br/>
+                <input type="text" onChange = {(e)=>setFirstName(e.target.value)}/>
+            </p>
+            <p>
+                <label>Last Name</label><br/>
+                <input type="text" onChange = {(e)=>setLastName(e.target.value)}/>
+            </p>
+            <input type="submit"/>
+        </form>
+    )
+}
+export default PersonForm;
+
+
+//client/src/views/Main.js
+
+import React, { useEffect, useState } from 'react';
+import PersonForm from '../components/PersonForm';
+const Main = () => {
+    return (
+        <div>
+           <PersonForm/>
+        </div>
+    )
+}
+export default Main;
+
+
+//client/src/components/PersonList.js
+import React from 'react';
+import axios from 'axios';
+import { Link } from '@reach/router';
+const PersonList = (props) => {
+    const { removeFromDom } = props;
+    const deletePerson = (personId) => {
+        axios.delete('http://localhost:8000/api/people/' + personId)
+            .then(res => {
+                removeFromDom(personId)
+            })
+    }
+    return (
+        <div>
+            {props.people.map((person, idx) => {
+                return <p key={idx}>
+                    <Link to={"/people/" + person._id}>
+                        {person.lastName}, {person.firstName}
+                    </Link>
+                    |
+                    <Link to={"/people/" + person._id + "/edit"}>
+                       Edit
+                    </Link>
+                    |
+                    <button onClick={(e)=>{deletePerson(person._id)}}>
+                        Delete
+                    </button>
+                </p>
+            })}
+        </div>
+    )
+}
+export default PersonList;
+
+
+//client/src/views/Main.js
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+import PersonForm from '../components/PersonForm';
+import PersonList from '../components/PersonList';
+const Main = () => {
+    const [people, setPeople] = useState([]);
+    const [loaded, setLoaded] = useState(false);
+    useEffect(()=>{
+        axios.get('http://localhost:8000/api/people')
+            .then(res=>{
+                setPeople(res.data);
+                setLoaded(true);
+            });
+    },[]);
+    
+    const removeFromDom = personId => {
+        setPeople(people.filter(person => person._id != personId));
+    }
+    
+    return (
+        <div>
+           <PersonForm/>
+           <hr/>
+           {loaded && <PersonList people={people} removeFromDom={removeFromDom}/>}
+        </div>
+    )
+}
+export default Main;
+
+
+//client/src/views/Detail.js
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+const Detail = (props) => {
+    const [person, setPerson] = useState({})
+    useEffect(() => {
+        axios.get("http://localhost:8000/api/people/" + props.id)
+            .then(res => setPerson({
+                ...res.data
+            }))
+    }, [])
+    return (
+        <div>
+            <p>First Name: {person.firstName}</p>
+            <p>Last Name: {person.lastName}</p>
+        </div>
+    )
+}
+export default Detail;
+
+
+//update your app.js to include the Router functionality:
+//run npm install @reach/router within your React project folder in the terminal.
+//client/src/App.js
+import React from 'react';
+import { Router } from '@reach/router';   /* this is new */
+import Main from './views/Main';
+import Detail from './views/Detail';
+import Update from './views/Update';
+function App() {
+  return (
+    <div className="App">
+      <Router>                            /* this is new */
+        <Main path="/people/"/>
+        <Detail path="/people/:id" />
+		<Update path="/people/:id/edit"/>
+      </Router>                           /* this is new */
+    </div>
+  );
+}
+export default App;
+
+
+//client/src/views/Update.js
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+const Update = (props) => {
+    const { id } = props;
+    const [firstName, setFirstName] = useState();
+    const [lastName, setLastName] = useState();
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/people/' + id)
+            .then(res => {
+                setFirstName(res.data.firstName);
+                setLastName(res.data.lastName);
+            })
+    }, [])
+    const updatePerson = (e) => {
+        e.preventDefault();
+        axios.put('http://localhost:8000/api/people/' + id, {
+            firstName,    // this is shortcut syntax for firstName: firstName,
+            lastName      // this is shortcut syntax for lastName: lastName
+        })
+            .then(res => console.log(res));
+    }
+    return (
+        <div>
+            <h1>Update a Person</h1>
+            <form onSubmit={updatePerson}>
+                <p>
+                    <label>First Name</label><br />
+                    <input type="text" 
+                    name="firstName" 
+                    value={firstName} 
+                    onChange={(e) => { setFirstName(e.target.value) }} />
+                </p>
+                <p>
+                    <label>Last Name</label><br />
+                    <input type="text" 
+                    name="lastName"
+                    value={lastName} 
+                    onChange={(e) => { setLastName(e.target.value) }} />
+                </p>
+                <input type="submit" />
+            </form>
+        </div>
+    )
+}
+export default Update;
+
+
+
+------Advanced MERN stack:
+
+--Example(Reusing Components)
+
+//components/PersonForm.js
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+const PersonForm = (props) => {
+    const { initialFirstName, initialLastName, onSubmitProp } = props;
+    const [firstName, setFirstName] = useState(initialFirstName);
+    const [lastName, setLastName] = useState(initialLastName);
+    const onSubmitHandler = e => {
+        e.preventDefault();
+        onSubmitProp({firstName, lastName});
+    }
+        
+    return (
+        <form onSubmit={onSubmitHandler}>
+            <p>
+                <label>First Name</label><br />
+                <input 
+                    type="text" 
+                    name="firstName" 
+                    value={firstName} 
+                    onChange={(e) => setFirstName(e.target.value)}
+                />
+            </p>
+            <p>
+                <label>Last Name</label><br />
+                <input 
+                    type="text" 
+                    name="lastName" 
+                    value={lastName} 
+                    onChange={(e) => setLastName(e.target.value)}
+                />
+            </p>
+            <input type="submit" />
+        </form>
+    )
+}
+export default PersonForm;
+
+
+//views/Main.js(updated)
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+import PersonForm from '../components/PersonForm';
+import PersonList from '../components/PersonList';
+const Main = () => {
+    const [people, setPeople] = useState([]);
+    const [loaded, setLoaded] = useState(false);
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/people')
+            .then(res =>{ 
+                setPeople(res.data)
+                setLoaded(true);
+            });
+    }, [])
+    const removeFromDom = personId => {
+        setPeople(people.filter(person => person._id != personId));
+    }
+    const createPerson = person => {
+        axios.post('http://localhost:8000/api/people', person)
+            .then(res=>{
+                setPeople([...people, res.data]);
+            })
+    }
+    return (
+        <div>
+           <PersonForm onSubmitProp={createPerson} initialFirstName="" initialLastName=""/>
+           <hr/>
+           {loaded && <PersonList people={people} removeFromDom={removeFromDom}/>}
+        </div>
+    )
+}
+export default Main;
+
+
+//views/Update.js(updated)
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+import { navigate } from '@reach/router';
+import PersonForm from '../components/PersonForm';
+const Update = (props) => {
+    const { id } = props;
+    const [person, setPerson] = useState();
+    const [loaded, setLoaded] = useState(false);
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/people/' + id)
+            .then(res => {
+                setPerson(res.data);
+                setLoaded(true);
+            })
+    }, [])
+    const updatePerson = person => {
+        axios.put('http://localhost:8000/api/people/' + id, person)
+            .then(res => console.log(res));
+    }
+    return (
+        <div>
+            <h1>Update a Person</h1>
+            {loaded && (
+                <PersonForm
+                    onSubmitProp={updatePerson}
+                    initialFirstName={person.firstName}
+                    initialLastName={person.lastName}
+                />
+            )}
+        </div>
+    )
+}
+export default Update;
+
+
+//components/DeleteButton.js
+import React from 'react'
+import axios from 'axios';
+const DeleteButton = (props) => {
+    const { personId, successCallback } = props;
+    const deletePerson = e => {
+        axios.delete('http://localhost:8000/api/people/' + personId)
+            .then(res=>{
+                successCallback();
+            })
+    }
+    return (
+        <button onClick={deletePerson}>
+            Delete
+        </button>
+    )
+}
+export default DeleteButton;
+
+
+//components/PersonList.js
+import React, { useEffect, useState } from 'react'
+import { Link } from '@reach/router';
+import axios from 'axios';
+import DeleteButton from './DeleteButton';
+const PersonList = (props) => {
+    const [people, setPeople] = useState([]);
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/people')
+            .then(res => setPeople(res.data));
+    }, [])
+    const removeFromDom = personId => {
+        setPeople(people.filter(person => person._id != personId))
+    }
+    return (
+        <div>
+            {people.map((person, idx) => {
+                return (
+                    <p key={idx}>
+                        <Link to={"/people/" + person._id}>
+                            {person.lastName}, {person.firstName}
+                        </Link>
+                        |
+                        <Link to={"/people/" + person._id + "/edit"}>
+                            Edit
+                        </Link> 
+                        |
+                       <DeleteButton personId={person._id} successCallback={()=>removeFromDom(person._id)}/>
+                    </p>
+                )
+            })}
+        </div>
+    )
+}
+export default PersonList;
+
+
+//views/Update.js
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+import { navigate } from '@reach/router';
+import PersonForm from '../components/PersonForm';
+import DeleteButton from '../components/DeleteButton';
+const Update = (props) => {
+    const { id } = props;
+    const [person, setPerson] = useState();
+    const [loaded, setLoaded] = useState(false);
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/people/' + id)
+            .then(res => {
+                setPerson(res.data);
+                setLoaded(true);
+            })
+    }, [])
+    const updatePerson = person => {
+        axios.put('http://localhost:8000/api/people/' + id, person)
+            .then(res => console.log(res));
+    }
+    return (
+        <div>
+            <h1>Update a Person</h1>
+            {loaded && (
+                <>
+                    <PersonForm
+                        onSubmitProp={updatePerson}
+                        initialFirstName={person.firstName}
+                        initialLastName={person.lastName}
+                    />
+                    <DeleteButton personId={person._id} successCallback={() => navigate("/")} />
+                </>
+            )}
+        </div>
+    )
+}
+export default Update;
+
+
+-----Material-UI 
+npx create-react-app client
+//Once that is created, change directories into that folder and install Material-UI:
+npm install @material-ui/core
+
+--Example:
+
+import { Paper } from '@material-ui/core';
+...
+<Paper elevation={3}>
+    <p>Some text here</p>
+</Paper>
+
+import { Card, CardContent } from '@material-ui/core';
+...
+<Card>
+    <CardContent>
+        <h1>This is content within my card</h1>
+    </CardContent>
+</Card>
+
+import { Button } from '@material-ui/core';
+...
+<Button>
+    Click Me
+</Button>
+
+<TextField variant="filled"/>
+
+//components/LoginForm.js
+import React from 'react';
+import {
+    Paper,
+    FormControl,
+    InputLabel,
+    OutlinedInput,
+    Button
+} from '@material-ui/core';
+const styles = {
+    paper: {
+        width: "20rem", padding: "1rem"
+    },
+    input: {
+        marginBottom: "1rem"
+    },
+    button: {
+        width: "100%"
+    }
+}
+function LoginForm() {
+    return (
+        <Paper elevation={3} style={styles.paper}>
+            <h2>Login Form</h2>
+            <form>
+                <FormControl variant="outlined" style={styles.input}>
+                    <InputLabel>Username</InputLabel>
+                    <OutlinedInput type="text"/>
+                </FormControl>
+                <FormControl variant="outlined" style={styles.input}>
+                    <InputLabel>E-mail</InputLabel>
+                    <OutlinedInput type="email"/>
+                </FormControl>
+                <FormControl variant="outlined" style={styles.input}>
+                    <InputLabel>Password</InputLabel>
+                    <OutlinedInput type="password"/>
+                </FormControl>
+                <FormControl variant="outlined" style={styles.input}>
+                    <InputLabel>Password</InputLabel>
+                    <OutlinedInput type="password"/>
+                </FormControl>
+                <Button type="submit" variant="contained" color="primary">
+                    Register
+                </Button>
+            </form>
+        </Paper>
+    )
+}
+export default LoginForm;
+
+
+
+----Validations
+
+--Example:
+//////////////////////////////////////////////////////////////
+const mongoose = require('mongoose');
+const BookSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: [
+            true,
+            "Title is required"
+        ]
+    },
+    numberOfPages: {
+        type: Number,
+        required: [
+            true,
+            "Pages is required"
+        ]
+    }    
+}, { timestamps: true });
+module.exports = mongoose.model('Book', BookSchema);
+
+///////////////////////////////////////////////////////////////
+const Book = require('../models/book.model');
+module.exports = {
+    create: (request, response) => {
+        const { title, pages } = request.body;
+        Book.create({
+            title: title,
+            numberOfPages: pages
+        })
+            .then(book => response.json(book))
+            .catch(err => response.status(400).json(err))
+    }
+}
+
+//////////////////////////////////////////////////////////////
+import React, { useState } from 'react';
+import axios from 'axios';
+const Main = () {
+    const [title, setTitle] = useState("");
+    const [pages, setPages] = useState(0);
+    //Create an array to store errors from the API
+    const [errors, setErrors] = useState([]); 
+    const onSubmitHandler = e => {
+        e.preventDefault();
+        //Send a post request to our API to create a Book
+        axios.post('http://localhost:8000/api/books', {
+            title,
+            pages
+        })
+            .then(res=>console.log(res)) // If successful, do something with the response. 
+            .catch(err=>{
+                const errorResponse = err.response.data.errors; // Get the errors from err.response.data
+                const errorArr = []; // Define a temp error array to push the messages in
+                for (const key of Object.keys(errorResponse)) { // Loop through all errors and get the messages
+                    errorArr.push(errorResponse[key].message)
+                }
+                // Set Errors
+                setErrors(errorArr);
+            })            
+    }
+    return (
+        <div>
+            <form onSubmit={onSubmitHandler}>
+                {errors.map((err, index) => <p key={index}>{err}</p>)}
+                <p>
+                    <label>Title</label>
+                    <input type="text" onChange={e => setTitle(e.target.value)} />
+                </p>
+                <p>
+                    <label>Pages</label>
+                    <input type="text" onChange={e => setPages(e.target.value)} />
+                </p>
+                <input type="submit" />
+            </form>
+        </div>
+    )
+}
+export default Main;
+
+
+--or
+
+import React, { useState } from 'react';
+import axios from 'axios';
+const Main = () {
+    const [title, setTitle] = useState("");
+    const [pages, setPages] = useState(0);
+    //Create an array to store errors from the API
+    const [errors, setErrors] = useState([]); 
+    const onSubmitHandler = e => {
+        e.preventDefault();
+        //Send a post request to our API to create a Book
+        axios.post('http://localhost:8000/api/books', {
+            title,
+            pages
+        })
+            .then(res=>console.log(res)) // If successful, do something with the response. 
+            .catch(err=>{
+                setErrors(err.response.data.errors);
+            })            
+    }
+    return (
+        <div>
+            <form onSubmit={onSubmitHandler}>
+                {errors.map((err, index) => <p key={index}>{err}</p>}
+                <p>
+                    <label>Title</label>
+                    <input type="text" onChange={e => setTitle(e.target.value)} />
+                    { errors.title ? 
+                        <p>{errors.title.message}</p>
+                        : null
+                    }
+                </p>
+                <p>
+                    <label>Pages</label>
+                    <input type="text" onChange={e => setPages(e.target.value)} />
+                    { errors.numberOfPages ? 
+                        <p>{errors.numberOfPages.message}</p>
+                        : null
+                    }
+                </p>
+                <input type="submit" />
+            </form>
+        </div>
+    )
+}
+export default Main;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------Full Stack MERN---------------------------------------
 
