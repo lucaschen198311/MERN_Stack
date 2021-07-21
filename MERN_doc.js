@@ -158,7 +158,138 @@ const m5 = new M5("Blue");
 m5.childFunction();
 
 
+----Class Components
 
+import React, { Component } from 'react';
+    
+class SomeClassComponent extends Component {
+    render() {
+        return <div>This is our first class component.</div>;
+    }
+}
+    
+export default SomeClassComponent;
+
+
+----Props
+
+class Header extends React.Component {
+    render() {
+        return (
+            <div>
+                // By inheriting from React.Component all we need is the "this" keyword in front of props.
+                <h1>My name is { this.props.firstName } { this.props.lastName }</h1>
+            </div>
+        );
+    }
+}
+
+--or
+
+class Header extends React.Component {
+    render() {
+        const { firstName, lastName } = this.props;
+        return (
+            <div>
+              // Destructuring allows us to use them like variables. This is just a small amount of syntactical sugar.
+                <h1>My name is { firstName }  { lastName }</h1>
+            </div>
+        );
+    }
+}
+
+
+----Children
+
+--App.js
+import React from 'react';
+import './App.css';
+import MyNewComponent from './components/MyNewComponent';
+    
+    
+function App() {
+  return (
+    <div className="App">
+        <MyNewComponent header={ "Header Prop" }>
+            <p>This is a child</p>
+            <p>This is another child</p>
+            <p>This is even another child</p>
+        </MyNewComponent>  
+    </div>
+  );
+}
+    
+export default App;
+
+--MyNewComponent.js
+import React, { Component } from 'react';
+    
+    
+class MyNewComponent extends Component{
+    render(){
+        return(
+            <div>
+                <h1>
+                    { this.props.header }
+                </h1>
+                { this.props.children }
+            </div>
+        );
+    }
+}
+    
+export default MyNewComponent;
+
+
+----Synthetic Events
+
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
+    
+    
+function App() {
+    return (
+        <button onClick={ ()=> alert("This button has been clicked!") }>Click Me</button>
+    );
+}
+    
+export default App;
+
+
+
+----State
+
+import React, { Component } from 'react';
+                         
+class LightSwitch extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            position: "On"
+        };
+    }
+	
+	// this method goes inside of the LightSwitch Component
+	flipSwitch = () => {
+		if( this.state.position === "On" ) {
+			this.setState({ position: "Off" });
+		} else {
+			this.setState({ position: "On" });
+		}
+	}
+    
+    render() {
+        return (
+            <fieldset>
+                <p>The light is currently { this.state.position }</p>
+                <button onClick={ this.flipSwitch }>Flip Switch</button>
+            </fieldset>
+        );
+    }
+}
+                
+export default LightSwitch;
 
 
 

@@ -1,0 +1,20 @@
+form{
+    margin:auto;
+    padding:20px;
+}
+button{
+    margin-left:15px;
+    text-align: center;
+    background-color: lightgray;
+    border: brown 1px solid;
+}
+
+.boxes{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.box{
+    margin:10px;
+    border:lightgray 1px solid;
+}
