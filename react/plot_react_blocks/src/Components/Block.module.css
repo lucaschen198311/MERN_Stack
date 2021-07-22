@@ -1,0 +1,28 @@
+.header{
+    background-color: #6aa84f;
+    height:100px;
+}
+.navigation{
+    background-color: #6fa8dc;
+    width:20%;
+    height:400px;
+    margin-top:15px;
+    margin-bottom: 100px;
+    padding:0px 5px 0px 50px;
+}
+.subcontent{
+    background-color: #ffd966;
+    width:150px;
+    height:300px;
+}
+.advertisement{
+    background-color: #b4a7d6;
+    height:100px;
+    margin:20px;
+}
+.main{
+    background-color: #e06666;
+    width:75%;
+    height:500px;
+    margin-top:15px;
+}
