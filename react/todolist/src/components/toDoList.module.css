@@ -1,0 +1,61 @@
+.addBtn{
+    margin-left:15px;
+    background-color: skyblue;
+    color:black;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    border: 2px solid lightskyblue;
+    width:100px;
+    height:30px;
+    font-size:16px;
+}
+
+.form{
+    margin:20px 10px;
+    text-align: center;
+}
+
+.input{
+    width:300px;
+    height:30px;
+    box-sizing: border-box;
+    border: 2px solid darkgray;
+    background-color: lightcyan;
+    border-radius: 4px;
+}
+.deleteBtn{
+    margin-left:10px;
+    background-color:black;
+    color:white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    border: 2px solid black;
+    width:60px;
+    height:20px;
+    font-size:12px;
+}
+
+.checked{
+    text-decoration-line: line-through;
+}
+
+.taskItem{
+    margin:20px;
+    text-align: left;
+    list-style-type: square;
+}
+.taskList{
+    margin:50px 0px 10px 400px;
+    width:50%;
+}
+span{
+    margin-right:15px;
+    color:blue;
+}
+
+h2{
+    text-align: left;
+    margin-left:45px;
+}
