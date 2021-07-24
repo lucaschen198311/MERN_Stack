@@ -1,0 +1,11 @@
+.inputContent{
+    background-color: lightgray;
+    border-radius: 5px;
+}
+.nav{
+    background-color: purple;
+    width:30%;
+    text-align: right;
+    color:white;
+    margin-left:500px;
+}
