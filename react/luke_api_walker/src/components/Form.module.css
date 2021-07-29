@@ -1,0 +1,30 @@
+.apiForm{
+    margin-top:20px;
+    padding:10px;
+}
+label{
+    margin:0px 10px 10px 10px;
+}
+button{
+    margin-left:20px;
+    border-radius: 4px;
+    height:30px;
+    width:80px;
+    border:none;
+    background-color: blue;
+    color:white;
+}
+input{
+    background-color: lightgray;
+    border-radius: 4px;
+    height:30px;
+    width:50px;
+    border:none;
+}
+select{
+    background-color: lightgray;
+    border-radius: 4px;
+    height:30px;
+    width:150px;
+    border:none;
+}

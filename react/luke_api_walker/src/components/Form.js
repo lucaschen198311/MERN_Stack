@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import styles from './Form.module.css';
 const Form = props=>{
-    const [name, setName] = useState("");
+    const [name, setName] = useState("people");
     const [id, setId] = useState("");
     const [nameList, setNameList] = useState([]);
     useEffect(()=>{
@@ -11,11 +12,14 @@ const Form = props=>{
     }, []);
     const handelSubmit = (e)=>{
         e.preventDefault();
-        console.log({name:name, id:id});
-        props.setInput({name:{name}, id:{id}})
+        const inputCopy = {
+            name: name,
+            id: id
+        }
+        props.setInput(inputCopy);
     }
     return(
-        <div>
+        <div className={styles.apiForm}>
             <form onSubmit={e=>handelSubmit(e)}>
                 <label>Serach For: </label>
                 <select name="nameList" onChange={e=>setName(e.target.value)}>
