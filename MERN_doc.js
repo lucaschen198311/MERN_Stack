@@ -75,6 +75,36 @@ https://reactstrap.github.io/
 --Semantic UI React
 https://react.semantic-ui.com/
 
+--Reconciliation
+https://reactjs.org/docs/reconciliation.html
+
+--web socket:
+https://socket.io/docs/v4/index.html
+
+--React.StrictMode
+https://github.com/facebook/react/issues/15074
+
+--Hooks API Reference
+https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
+
+--Mongoose Virtual:
+https://mongoosejs.com/docs/tutorials/virtuals.html
+
+--Mongoose middleware:
+https://mongoosejs.com/docs/middleware.html#pre
+
+--dotenv 
+https://www.npmjs.com/package/dotenv
+
+--JSON web token:
+https://jwt.io/
+
+--Cookies：
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
+
+--Http status code:
+https://http.cat/
+
 *****************************************************************************************
 
 -----------------------------------------JS/OOP-------------------------------------------
@@ -291,6 +321,175 @@ class LightSwitch extends Component {
                 
 export default LightSwitch;
 
+
+----Styled Components (CSS style)
+
+npm install styled-components
+
+--in src/components/StyledBox.js：
+
+import React from 'react';
+import styled from 'styled-components';
+ 
+const StyledBox = styled.div`
+    border: 1px solid lightgray;
+    background: ${props => props.bgColor};
+    width: ${props => props.width || '100px'};
+    height: ${props => props.height || '100px'};
+`;
+ 
+export default StyledBox;
+
+--in src/components/SomeOtherComponent.js：
+
+import React from 'react';
+ 
+import StyledBox from './StyledBox';
+ 
+const SomeOtherComponent = () => (
+    <div>
+        <StyledBox bgColor="blue"/>
+        <StyledBox bgColor="red" height="200px"/>
+    </div>
+)
+ 
+export default SomeOtherComponent;
+
+
+----Styletron(CSS style):
+
+npm install styletron-react
+
+--in src/App.js:
+
+import React from 'react';
+ 
+import { Provider } from 'styletron-react';
+ 
+import { Client as Styletron } from 'styletron-engine-atomic';
+ 
+const engine = new Styletron();
+ 
+function App() {
+    return (
+        <Provider value={engine}>
+            {/* your other components go in here */}
+        </Provider>
+    )
+}
+ 
+export default App;
+
+
+--in src/components/StyledBox.js:
+
+import React from 'react'; 
+import { styled } from 'styletron-react';
+ 
+const StyledBox = styled('div', props => ({
+    border: '1px solid lightgray',
+    background: props.$bgColor,
+    width: props.$width || '100px',
+    height: props.$height || '100px',
+ 
+    display: 'none',
+ 
+    ['@media and (min-width: ' + (props.$minWidth || '500px') + ')']: {
+        display: 'block'
+    }
+}));
+ 
+export default StyledBox;
+
+
+--in src/components/SomeOtherComponent.js:
+
+import React from 'react';
+ 
+import StyledBox from './StyledBox';
+ 
+const SomeOtherComponent = () => (
+    <div>
+        <StyledBox $bgColor="blue"/>
+        <StyledBox $bgColor="red" $height="200px" $minWidth="1200"/>
+    </div>
+)
+ 
+export default SomeOtherComponent;
+
+
+----useRef (code examples)
+
+import React, { useRef } from 'react';
+ 
+export default () => {
+    const input = useRef();
+ 
+    function focusInput() {
+        input.current.focus();
+    }
+ 
+    return (
+        <>
+            <input ref={input}/>
+            <button onClick={focusInput}>Focus Me!</button>
+        </>
+    );
+}
+
+
+import React, { useRef, useState } from 'react';
+ 
+export default () => {
+    const canvas = useRef();
+    const [xVal, setXVal] = useState(0);
+    const [yVal, setYVal] = useState(0);
+    const [color, setColor] = useState('black');
+ 
+    function drawSquare(color, x, y) {
+        const ctx = canvas.current.getContext('2d');
+ 
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, 100, 100);
+    }
+ 
+    return (
+        <>
+            <canvas ref={canvas} height="400" width="400"/>
+            <div>
+                <label>X Coordinate</label>
+                <input
+                    type="number"
+                    min="0"
+                    max="200"
+                    onChange={e => setXVal(+e.target.value)}
+                    value={xVal}
+                />
+            </div>
+            <div>
+                <label>Y Coordinate</label>
+                <input
+                    type="number"
+                    min="0"
+                    max="200"
+                    onChange={e => setYVal(+e.target.value)}
+                    value={yVal}
+                />
+            </div>
+            <select
+                onChange={e => setColor(e.target.value)}
+                value={color}
+            >
+                <option value="black">black</option>
+                <option value="blue">blue</option>
+                <option value="red">red</option>
+            </select>
+            <div>
+                <button onClick={() => drawSquare(color, xVal, yVal)}>Draw!</button>
+            </div>
+        </>
+    );
+}
 
 
 
@@ -1486,7 +1685,7 @@ module.exports = {
 
 ----------------------------------------- Mongo DB -------------------------------------------
 
-cd C:\Program Files\MongoDB\Server\4.4\data\
+cd C:\Program Files\MongoDB\Server\4.4\bin\
 mongo.exe
 
 --basic commands:
@@ -2628,30 +2827,316 @@ export default Main;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -----------------------------------------Full Stack MERN---------------------------------------
 
+
+
+------------------------------------------MERN Authentication----------------------------------
+
+----User Model and Bcrypt:
+
+npm i bcrypt
+
+// near the top is a good place to group our imports
+const bcrypt = require('bcrypt');
+// this should go after 
+
+const UserSchema = new mongoose.Schema({
+  firstName: {
+    type: String,
+    required: [true, "First name is required"]
+  },
+  lastName: {
+    type: String,
+    required: [true, "Last name is required"]
+  },
+  email: {
+    type: String,
+    required: [true, "Email is required"],
+	validate: {
+		validator: val => /^([\w-\.]+@([\w-]+\.)+[\w-]+)?$/.test(val),
+		message: "Please enter a valid email"
+	}
+  },
+  password: {
+    type: String,
+    required: [true, "Password is required"],
+    minlength: [8, "Password must be 8 characters or longer"]
+  }
+}, {timestamps: true});
+
+
+// add this after UserSchema is defined for password confirmation:
+UserSchema.virtual('confirmPassword')
+  .get( () => this._confirmPassword )
+  .set( value => this._confirmPassword = value );
+
+
+UserSchema.pre('validate', function(next) {
+  if (this.password !== this.confirmPassword) {
+    this.invalidate('confirmPassword', 'Password must match confirm password');
+  }
+  next();
+});
+
+
+// this should go after 
+UserSchema.pre('save', function(next) {
+  bcrypt.hash(this.password, 10)
+    .then(hash => {
+      this.password = hash;
+      next();
+    });
+});
+
+
+----Registration
+
+--in user.controllers.js:
+
+...
+register: (req, res) => {
+  User.create(req.body)
+    .then(user => {
+        res.json({ msg: "success!", user: user });
+    })
+    .catch(err => res.json(err));
+}
+...
+
+----Environment Variables
+
+npm install dotenv
+
+//create a hidden .env file in the same folder as your server.js
+//Important: do not commit this if your project is a repository. You can avoid committing it by adding the string .env to a .gitignore file.
+
+--in server.js:
+
+require('dotenv').config();
+const myFirstSecret = process.env.FIRST_SECRET_KEY;
+
+
+----JSON Web Tokens
+
+npm install jsonwebtoken
+
+const jwt = require("jsonwebtoken");
+
+const payload = {
+  id: user._id
+};
+ 
+// notice that we're using the SECRET_KEY from our .env file
+const userToken = jwt.sign(payload, process.env.SECRET_KEY);
+
+
+----Cookies：
+
+npm install cookie-parser
+
+--in server.js:
+
+const cookieParser = require('cookie-parser');
+...
+app.use(cookieParser());
+// Change the app.use(cors()) to the one below
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+
+//In a given response, we can set a cookie via the following:
+res.cookie("mycookie", "mydata", { httpOnly: true }).json({
+  message: "This response has a cookie"
+});
+
+
+----async/await:
+
+async function oneAfterAnother() {
+    try {
+        const firstResult = await firstFunc();
+        const secondResult = await secondFunc(firstResult);
+ 
+        return secondResult;
+    } catch(err) {
+        // do something with the error here
+    }
+}
+
+
+----Login/Logout:
+
+//When logging in:
+login: async(req, res) => {
+    const user = await User.findOne({ email: req.body.email });
+ 
+    if(user === null) {
+        // email not found in users collection
+        return res.sendStatus(400);
+    }
+ 
+    // if we made it this far, we found a user with this email address
+    // let's compare the supplied password to the hashed password in the database
+    const correctPassword = await bcrypt.compare(req.body.password, user.password);
+ 
+    if(!correctPassword) {
+        // password wasn't a match!
+        return res.sendStatus(400);
+    }
+ 
+    // if we made it this far, the password was correct
+    const userToken = jwt.sign({
+        id: user._id
+    }, process.env.SECRET_KEY);
+ 
+    // note that the response object allows chained calls to cookie and json
+    res.cookie("usertoken", userToken, secret, {
+            httpOnly: true
+        }).json({ msg: "success!" });
+}
+
+//Once the user is successfully registered, we can log them in immediately as an added convenience:
+...
+register: (req, res) => {
+  User.create(req.body)
+    .then(user => {
+        const userToken = jwt.sign({
+            id: user._id
+        }, process.env.SECRET_KEY);
+ 
+        res.cookie("usertoken", userToken, secret, {
+                httpOnly: true
+            }).json({ msg: "success!", user: user });
+    })
+    .catch(err => res.json(err));
+}
+...
+
+
+//Logging out is as simple as clearing the usertoken cookie:
+...
+logout: (req, res) => {
+    res.clearCookie('usertoken');
+    res.sendStatus(200);
+}
+...
+
+
+----Authorization and Middleware:
+
+--in jwt.config.js:
+
+const jwt = require("jsonwebtoken");
+const secret = "I can't believe this key is so secret!";
+module.exports.secret = secret;
+module.exports.authenticate = (req, res, next) => {
+  jwt.verify(req.cookies.usertoken, secret, (err, payload) => {
+    if (err) { 
+      res.status(401).json({verified: false});
+    } else {
+      next();
+    }
+  });
+}
+
+
+// inside of user.routes.js
+const Users = require('../controllers/user.controller');
+const { authenticate } = require('../config/jwt.config');
+module.exports = app => {
+  app.post("/api/register", Users.register);
+  app.post("/api/login", Users.login);
+  // this route now has to be authenticated
+  app.get("/api/users", authenticate, Users.getAll);
+}
+
+//Note: MAKE SURE EACH REQUEST IS SENT WITH { withCredentials: true }
+
+------------------------------------------MERN Authentication----------------------------------
+
+
+
+--------------------------------------------Web Sockets-----------------------------------------
+
+npm install socket.io
+
+--in server/server.js:
+
+const express = require('express');
+const app = express();
+const cors = require('cors');
+const socket = require('socket.io');
+const port = 8000;
+app.use(cors());
+ 
+const server = app.listen(port, () => {
+    console.log(`Listening on port: ${port}`)
+});
+ 
+// to initialize the socket, we need to invoke a new instance
+//     of socket.io and pass it our express server instance
+// We must also include a configuration settings object to prevent CORS errors
+const io = socket(server, {
+    cors: {
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST'],
+        allowedHeaders: ['*'],
+        credentials: true
+    }
+});
+
+io.on("connection", socket => {
+    // NOTE: Each client that connects get their own socket id!
+    // if this is logged in our node terminal, that means we a new client
+    //     has successfully completed the handshake!
+    console.log('socket id: ' + socket.id);
+    
+    // We add our additional event listeners right inside this function
+    // NOTE: "connection" is a BUILT IN events listener
+	socket.on("event_from_client", data => {
+        // send a message with "data" to ALL clients EXCEPT for the one that emitted the
+    	//     "event_from_client" event
+        socket.broadcast.emit("event_to_all_other_clients", data);
+    });
+});
+
+//Emitting Events from the Server: They are all functions and all three take in two arguments: 1) the event name, and 2) optionally any data you want to send along with the event.
+//io.emit: emits an event to all connected clients
+//socket.broadcast.emit: emits an event to all clients other than this particular one, referenced by the socket variable
+//socket.emit: emits an event directly to this specific client
+
+----Socket.io-client && React
+
+npm install socket.io-client
+
+import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
+import './App.css';
+ 
+function App() {
+  // notice that we pass a callback function to initialize the socket
+  // we don't need to destructure the 'setSocket' function since we won't be updating the socket state
+  const [socket] = useState(() => io(':8000')); //io(":nodeServerPortNumberGoesRightHere")
+ 
+  useEffect(() => {
+    // we need to set up all of our event listeners
+    // in the useEffect callback function
+    console.log('Is this running?');
+    socket.on('Welcome', data => console.log(data));
+ 
+    // note that we're returning a callback function
+    // this ensures that the underlying socket will be closed if App is unmounted
+    // this would be more critical if we were creating the socket in a subcomponent
+    return () => socket.disconnect(true);
+  }, []);
+ 
+  return (
+    <div className="App">
+      <h1>Socket Test</h1>
+    </div>
+  );
+}
+ 
+export default App;
+
+
+--------------------------------------------Web Sockets-----------------------------------------
