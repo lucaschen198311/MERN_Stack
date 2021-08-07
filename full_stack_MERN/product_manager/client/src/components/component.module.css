@@ -1,0 +1,13 @@
+.link{
+    margin: 0px 10px 0px 10px;
+}
+
+button{
+    margin: 0px 10px 0px 10px;
+    background-color: #f44336;
+    font-size: 14px;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    border:none;
+}
