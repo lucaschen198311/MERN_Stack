@@ -2,11 +2,11 @@ import React, { useState, useEffect} from 'react'
 import axios from 'axios';
 const ProdManForm = (props) => {
     //keep track of what is being typed via useState hook
-    const { initTitle, initPrice, initDescription, onSubmitProp } = props;
+    const { id, initTitle, initPrice, initDescription, onSubmitProp } = props;
     const [title, setTitle] = useState(initTitle); 
     const [price, setPrice] = useState(initPrice);
     const [description, setDescription] = useState(initDescription);
-    const btnLabel = initTitle!==""? "Edit":"Create";
+    const btnLabel = id!==""? "Edit":"Create";
     //handler when the form is submitted
     const onSubmitHandler = e => {
         //prevent default behavior of the submit

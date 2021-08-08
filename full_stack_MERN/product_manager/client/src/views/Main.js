@@ -29,7 +29,7 @@ const Main = () => {
     }
     return (
         <div>
-            <ProdManForm onSubmitProp={createPM} initTitle="" initPrice="" initDescription=""/>
+            <ProdManForm onSubmitProp={createPM} initTitle="" initPrice="" initDescription="" id=""/>
             <hr/>
             { loaded && 
             <div>

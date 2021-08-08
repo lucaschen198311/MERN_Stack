@@ -6,9 +6,6 @@ import {navigate} from '@reach/router';
 const PMUpdate = (props) => {
     const { id } = props;
     /*
-    const [title, setTitle] = useState();
-    const [price, setPrice] = useState();
-    const [description, setDescription] = useState();
     useEffect(() => {
         axios.get('http://localhost:8000/api/pms/' + id)
             .then(res => {
@@ -47,7 +44,8 @@ const PMUpdate = (props) => {
                 <>
                     <ProdManForm onSubmitProp={updatePM} 
                     initTitle={pm.title} initPrice={pm.price} 
-                    initDescription={pm.description}/>
+                    initDescription={pm.description}
+                    id={id}/>
                     <DeleteBtn pmId={pm._id} successCallback={() => navigate("/")} />
                 </>
             )}
