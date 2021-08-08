@@ -1,15 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import axios from 'axios';
-const ProdManForm = () => {
+const ProdManForm = (props) => {
     //keep track of what is being typed via useState hook
-    const [title, setTitle] = useState(""); 
-    const [price, setPrice] = useState("");
-    const [description, setDescription] = useState("");
+    const { initTitle, initPrice, initDescription, onSubmitProp } = props;
+    const [title, setTitle] = useState(initTitle); 
+    const [price, setPrice] = useState(initPrice);
+    const [description, setDescription] = useState(initDescription);
+    const btnLabel = initTitle!==""? "Edit":"Create";
     //handler when the form is submitted
     const onSubmitHandler = e => {
         //prevent default behavior of the submit
         e.preventDefault();
         //make a post request to create a new PM
+        /*
         axios.post('http://localhost:8000/api/pms', {
             title,    // this is shortcut syntax for title,
             price,      // this is shortcut syntax for price,
@@ -20,7 +23,8 @@ const ProdManForm = () => {
             setTitle("");
             setPrice("");
             setDescription("");
-            console.log(title, price, description);
+            */
+            onSubmitProp({title, price, description});
     }
     
     return (
@@ -37,7 +41,7 @@ const ProdManForm = () => {
                 <label>Description</label><br/>
                 <input type="text" value={description} onChange = {(e)=>setDescription(e.target.value)}/>
             </p>
-            <button type="submit" value="Create">Create</button>
+            <button type="submit" value="Create">{btnLabel}</button>
         </form>
     )
 }

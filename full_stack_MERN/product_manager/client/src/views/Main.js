@@ -21,11 +21,17 @@ const Main = () => {
     const removeFromDom=(pmId)=>{
         setPM(pm.filter(el=>el._id!=pmId))
     }
+    const createPM = el => {
+        axios.post('http://localhost:8000/api/pms', el)
+            .then(res=>{
+                setPM([...pm, res.data]);
+            })
+    }
     return (
         <div>
-            <ProdManForm/>
+            <ProdManForm onSubmitProp={createPM} initTitle="" initPrice="" initDescription=""/>
             <hr/>
-           { loaded && 
+            { loaded && 
             <div>
                 <h2>All Project Managers: </h2>
                 <PMList pm={pm} removeFromDom={removeFromDom}/>
