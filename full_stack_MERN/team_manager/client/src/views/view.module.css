@@ -1,0 +1,31 @@
+.box{
+    border-style:solid;
+    width:90%;
+    margin:auto;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+.container{
+    background-color: lightgray;
+    margin:auto;
+    margin-bottom: 20px;;
+    width:60%;
+    padding:auto;
+    padding-bottom: 15px;
+}
+
+.playerList{
+    width:90%;
+    margin: auto;
+    padding:auto;
+}
+
+.nav{
+    padding:20px;
+}
+
+.link{
+    margin:0px 15px;
+    color: darkcyan;
+}

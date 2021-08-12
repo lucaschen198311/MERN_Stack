@@ -14,7 +14,7 @@ module.exports.index = (request, response) => {
         description
     })
         .then(pm => response.json(pm))
-        .catch(err => response.json(err));
+        .catch(err => response.status(400).json(err));
 }
 
 module.exports.getAllPM = (request, response) => {
