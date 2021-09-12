@@ -1,0 +1,527 @@
+// On a Mac, this is how to start the server
+
+joshuagendal@Joshuas-MacBook-Pro ~ % brew services start mongodb-community@4.4
+==> Successfully started `mongodb-community` (label: homebrew.mxcl.mongodb-commu
+
+// Once MongoDB has started, we can use the mongo command to open the shell
+joshuagendal@Joshuas-MacBook-Pro ~ % mongo
+MongoDB shell version v4.4.1
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("9b68892f-1e85-41e0-9a51-e7d60664bf48") }
+MongoDB server version: 4.4.1
+---
+The server generated these startup warnings when booting:
+        2021-08-03T18:19:55.942-06:00: ***** SERVER RESTARTED *****
+        2021-08-03T18:19:57.566-06:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+
+// This is how we can see what dbs are available
+> show dbs
+admin            0.000GB
+authors          0.000GB
+config           0.000GB
+crmdb            0.000GB
+first_db         0.000GB
+joke             0.000GB
+josh_example_1   0.000GB
+local            0.000GB
+mars             0.000GB
+my_first_db      0.000GB
+name_of_your_DB  0.000GB
+poll             0.000GB
+product          0.000GB
+
+// This is how we can see which db we are currently using
+> db
+test
+
+// Chsnge dbs. If db does not exist, mongoDB will create the db
+> use july_mern_1
+switched to db july_mern_1
+
+// See which db we are using. Note how we are on the db we just created with use command
+> db
+july_mern_1
+
+// This is how to delete a db
+> db.dropDatabase()
+{ "ok" : 1 }
+
+> show dbs
+admin            0.000GB
+authors          0.000GB
+config           0.000GB
+crmdb            0.000GB
+first_db         0.000GB
+joke             0.000GB
+josh_example_1   0.000GB
+local            0.000GB
+mars             0.000GB
+my_first_db      0.000GB
+name_of_your_DB  0.000GB
+poll             0.000GB
+product          0.000GB
+
+// This is how we show collections in a db
+> show collections
+
+// See how it is empty, because w ehavenot created one yet.
+// This is how to create a new colleciton
+> db.createCollection("movies")
+{ "ok" : 1 }
+
+> show collections
+movies
+
+// Delete collection
+> db.movies.drop()
+true
+
+// Empty again
+> show collections
+
+// quit out of shell
+> quit()
+
+
+joshuagendal@Joshuas-MacBook-Pro ~ % mongo
+MongoDB shell version v4.4.1
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("378f0882-fe88-4f4c-8dc4-8d4e072148c0") }
+MongoDB server version: 4.4.1
+---
+The server generated these startup warnings when booting:
+        2021-08-03T18:19:55.942-06:00: ***** SERVER RESTARTED *****
+        2021-08-03T18:19:57.566-06:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+
+> use july_mern_main
+switched to db july_mern_main
+> show collections
+> db.createCollection("movies")
+{ "ok" : 1 }
+> show collections
+movies
+
+// Add new document to collection
+> db.movies.insert({title: 'Gone With The Wind', critic_rating: 84, release_date: {month: 01, day: 17, year: 1940}, actors: ["Marilyn Monroe", "Vivian Leigh"]})
+WriteResult({ "nInserted" : 1 })
+
+// Add new document to collection
+> db.moies.insert({title: 'Gone With The Wind', critic_rating: 84, release_date: {month: 01, day: 17, year: 1940}, actors: ["Marilyn Monroe", "Vivian Leigh"]})
+WriteResult({ "nInserted" : 1 })
+
+// Add new document to collection
+> db.movies.insert( { title: 'Apocalypse Now', critic_rating: 98, release_date: {month: 08, day: 15, year: 1979}})
+WriteResult({ "nInserted" : 1 })
+
+// Putting in a syntax error will cause an error
+> db.movies.iert( { title: 'Apocalypse Now', critic_rating: 98, release_date: {month: 08, day: 15, year: 1979}})
+uncaught exception: TypeError: db.movies.iert is not a function :
+@(shell):1:1
+
+// Find all docs in movies colleciton
+> db.movies.find()
+{ "_id" : ObjectId("6109e10acef916c378c1c501"), "title" : "Gone With The Wind", "critic_rating" : 84, "release_date" : { "month" : 1, "day" : 17, "year" : 1940 }, "actors" : [ "Marilyn Monroe", "Vivian Leigh" ] }
+{ "_id" : ObjectId("6109e1e8cef916c378c1c503"), "title" : "Apocalypse Now", "critic_rating" : 98, "release_date" : { "month" : 8, "day" : 15, "year" : 1979 } }
+
+// Find all docs in movies colleciton
+> db.movies.find({})
+{ "_id" : ObjectId("6109e10acef916c378c1c501"), "title" : "Gone With The Wind", "critic_rating" : 84, "release_date" : { "month" : 1, "day" : 17, "year" : 1940 }, "actors" : [ "Marilyn Monroe", "Vivian Leigh" ] }
+{ "_id" : ObjectId("6109e1e8cef916c378c1c503"), "title" : "Apocalypse Now", "critic_rating" : 98, "release_date" : { "month" : 8, "day" : 15, "year" : 1979 } }
+
+// Find all docs in movies colleciton, but use .pretty() to make it easier to read
+> db.movies.find({}).pretty()
+{
+	"_id" : ObjectId("6109e10acef916c378c1c501"),
+	"title" : "Gone With The Wind",
+	"critic_rating" : 84,
+	"release_date" : {
+		"month" : 1,
+		"day" : 17,
+		"year" : 1940
+	},
+	"actors" : [
+		"Marilyn Monroe",
+		"Vivian Leigh"
+	]
+}
+{
+	"_id" : ObjectId("6109e1e8cef916c378c1c503"),
+	"title" : "Apocalypse Now",
+	"critic_rating" : 98,
+	"release_date" : {
+		"month" : 8,
+		"day" : 15,
+		"year" : 1979
+	}
+}
+
+// query movies collection for a document with title 'Gone With The Wind'
+> db.movies.find({title: 'Gone With The Wind'})
+{ "_id" : ObjectId("6109e10acef916c378c1c501"), "title" : "Gone With The Wind", "critic_rating" : 84, "release_date" : { "month" : 1, "day" : 17, "year" : 1940 }, "actors" : [ "Marilyn Monroe", "Vivian Leigh" ] }
+
+// ... make it pretty
+> db.movies.find({title: 'Gone With The Wind'}).pretty()
+{
+	"_id" : ObjectId("6109e10acef916c378c1c501"),
+	"title" : "Gone With The Wind",
+	"critic_rating" : 84,
+	"release_date" : {
+		"month" : 1,
+		"day" : 17,
+		"year" : 1940
+	},
+	"actors" : [
+		"Marilyn Monroe",
+		"Vivian Leigh"
+	]
+}
+
+// Find document in movies collection with title 
+> db.movies.find({title: 'Apocalypse Now'}).pretty()
+{
+	"_id" : ObjectId("6109e1e8cef916c378c1c503"),
+	"title" : "Apocalypse Now",
+	"critic_rating" : 98,
+	"release_date" : {
+		"month" : 8,
+		"day" : 15,
+		"year" : 1979
+	}
+}
+
+// Search docs by release_date field
+> db.movies.find({release_date: {"month": 8, "day": 15, "year": 1979}}).pretty()
+{
+	"_id" : ObjectId("6109e1e8cef916c378c1c503"),
+	"title" : "Apocalypse Now",
+	"critic_rating" : 98,
+	"release_date" : {
+		"month" : 8,
+		"day" : 15,
+		"year" : 1979
+	}
+}
+
+// This is THE WRONG WAY TO UPDATE. This will remove every field for this doc except the ones provided in second {}
+> db.movies.update({title: 'Apocalypse Now'}, {actos: ["Martin Sheen", "Lawrence Fishburn", "Marlen Brando"]})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.movies.find().pretty()
+{
+	"_id" : ObjectId("6109e10acef916c378c1c501"),
+	"title" : "Gone With The Wind",
+	"critic_rating" : 84,
+	"release_date" : {
+		"month" : 1,
+		"day" : 17,
+		"year" : 1940
+	},
+	"actors" : [
+		"Marilyn Monroe",
+		"Vivian Leigh"
+	]
+}
+{
+	"_id" : ObjectId("6109e1e8cef916c378c1c503"),
+	"actos" : [
+		"Martin Sheen",
+		"Lawrence Fishburn",
+		"Marlen Brando"
+	]
+}
+
+// CORRECT WAY TO UPDATE!
+// db.collection.update({queryField: queryVal}, {$set: {fieldToAlter: newValue}})
+// For the second {} given to update function, use $set to alter fields inside $set's {}
+> db.movies.update({title: 'Gone With The Wind'}, { $set: {critic_rating: 88} })
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.movies.find().pretty()
+{
+	"_id" : ObjectId("6109e10acef916c378c1c501"),
+	"title" : "Gone With The Wind",
+	"critic_rating" : 88,
+	"release_date" : {
+		"month" : 1,
+		"day" : 17,
+		"year" : 1940
+	},
+	"actors" : [
+		"Marilyn Monroe",
+		"Vivian Leigh"
+	]
+}
+{
+	"_id" : ObjectId("6109e1e8cef916c378c1c503"),
+	"actos" : [
+		"Martin Sheen",
+		"Lawrence Fishburn",
+		"Marlen Brando"
+	]
+}
+
+// delete document
+> db.movies.remove({_id: ObjectId("6109e1e8cef916c378c1c503")})
+WriteResult({ "nRemoved" : 1 })
+> db.movies.find()
+{ "_id" : ObjectId("6109e10acef916c378c1c501"), "title" : "Gone With The Wind", "critic_rating" : 88, "release_date" : { "month" : 1, "day" : 17, "year" : 1940 }, "actors" : [ "Marilyn Monroe", "Vivian Leigh" ] }
+
+// Add another document to movies collection
+> db.movies.insert({title: 'Requiem For a Dream', critic_rating: 72, director: 'Darren Aronofsky', release_date: {month: 10, day: 6, year: 2000}})
+WriteResult({ "nInserted" : 1 })
+
+// Reinsert Apocalypse Now
+> db.movies.insert({title: 'Apocalypse Now', critic_rating: 94, director: 'Francis Ford Coppola', release_date: {month: 08, day: 15, year: 1979}})
+WriteResult({ "nInserted" : 1 })
+
+// Query all docs in movies collection
+> db.movies.find()
+{ "_id" : ObjectId("6109e10acef916c378c1c501"), "title" : "Gone With The Wind", "critic_rating" : 88, "release_date" : { "month" : 1, "day" : 17, "year" : 1940 }, "actors" : [ "Marilyn Monroe", "Vivian Leigh" ] }
+{ "_id" : ObjectId("6109e621cef916c378c1c504"), "title" : "Requiem For a Dream", "critic_rating" : 72, "director" : "Darren Aronofsky", "release_date" : { "month" : 10, "day" : 6, "year" : 2000 } }
+{ "_id" : ObjectId("6109e636cef916c378c1c505"), "title" : "Apocalypse Now", "critic_rating" : 94, "director" : "Francis Ford Coppola", "release_date" : { "month" : 8, "day" : 15, "year" : 1979 } }
+> db.movies.find().pretty()
+{
+	"_id" : ObjectId("6109e10acef916c378c1c501"),
+	"title" : "Gone With The Wind",
+	"critic_rating" : 88,
+	"release_date" : {
+		"month" : 1,
+		"day" : 17,
+		"year" : 1940
+	},
+	"actors" : [
+		"Marilyn Monroe",
+		"Vivian Leigh"
+	]
+}
+{
+	"_id" : ObjectId("6109e621cef916c378c1c504"),
+	"title" : "Requiem For a Dream",
+	"critic_rating" : 72,
+	"director" : "Darren Aronofsky",
+	"release_date" : {
+		"month" : 10,
+		"day" : 6,
+		"year" : 2000
+	}
+}
+{
+	"_id" : ObjectId("6109e636cef916c378c1c505"),
+	"title" : "Apocalypse Now",
+	"critic_rating" : 94,
+	"director" : "Francis Ford Coppola",
+	"release_date" : {
+		"month" : 8,
+		"day" : 15,
+		"year" : 1979
+	}
+}
+
+// Query docs in movies collection with critic_rating greate than 88
+> db.movies.find( { critic_rating: { $gt: 88 } } )
+{ "_id" : ObjectId("6109e636cef916c378c1c505"), "title" : "Apocalypse Now", "critic_rating" : 94, "director" : "Francis Ford Coppola", "release_date" : { "month" : 8, "day" : 15, "year" : 1979 } }
+
+// Query docs in movies collection with critic_rating greater than 87
+> db.movies.find( { critic_rating: { $gt: 87 } } ).pretty()
+{
+	"_id" : ObjectId("6109e10acef916c378c1c501"),
+	"title" : "Gone With The Wind",
+	"critic_rating" : 88,
+	"release_date" : {
+		"month" : 1,
+		"day" : 17,
+		"year" : 1940
+	},
+	"actors" : [
+		"Marilyn Monroe",
+		"Vivian Leigh"
+	]
+}
+{
+	"_id" : ObjectId("6109e636cef916c378c1c505"),
+	"title" : "Apocalypse Now",
+	"critic_rating" : 94,
+	"director" : "Francis Ford Coppola",
+	"release_date" : {
+		"month" : 8,
+		"day" : 15,
+		"year" : 1979
+	}
+}
+> db.movies.find( { critic_rating: { $lt: 87 } } ).pretty()
+{
+	"_id" : ObjectId("6109e621cef916c378c1c504"),
+	"title" : "Requiem For a Dream",
+	"critic_rating" : 72,
+	"director" : "Darren Aronofsky",
+	"release_date" : {
+		"month" : 10,
+		"day" : 6,
+		"year" : 2000
+	}
+}
+
+// Add to array in document with $push
+> db.movies.update({title: 'Gone With The Wind'}, {$push: {actors: "Gene Wilder"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.movies.find().pretty()
+{
+	"_id" : ObjectId("6109e10acef916c378c1c501"),
+	"title" : "Gone With The Wind",
+	"critic_rating" : 88,
+	"release_date" : {
+		"month" : 1,
+		"day" : 17,
+		"year" : 1940
+	},
+	"actors" : [
+		"Marilyn Monroe",
+		"Vivian Leigh",
+		"Gene Wilder"
+	]
+}
+{
+	"_id" : ObjectId("6109e621cef916c378c1c504"),
+	"title" : "Requiem For a Dream",
+	"critic_rating" : 72,
+	"director" : "Darren Aronofsky",
+	"release_date" : {
+		"month" : 10,
+		"day" : 6,
+		"year" : 2000
+	}
+}
+{
+	"_id" : ObjectId("6109e636cef916c378c1c505"),
+	"title" : "Apocalypse Now",
+	"critic_rating" : 94,
+	"director" : "Francis Ford Coppola",
+	"release_date" : {
+		"month" : 8,
+		"day" : 15,
+		"year" : 1979
+	}
+}
+
+
+> db.movies.update({title: 'Gone With The Wind'}, { $pop: {actors: -1} })
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+// Notice how we get nMatched: 0. This means our query didnt turn anything up
+> db.movies.update({title: 'Gone With The W'}, { $pop: {actors: -1} })
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 })
+
+// Incorrect query will turn up nothin
+> db.movies.find({title: 'dfaadf'})
+> db.movies.find().pretty()
+> db.movies.find({title: "Requiem For a Dream"})
+{ "_id" : ObjectId("6109e621cef916c378c1c504"), "title" : "Requiem For a Dream", "critic_rating" : 72, "director" : "Darren Aronofsky", "release_date" : { "month" : 10, "day" : 6, "year" : 2000 } }
+
+// This update will only match the first document it finds
+> db.movies.update({}, {$set: { example_field: 'hey hey' } } )
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.movies.find().pretty()
+{
+	"_id" : ObjectId("6109e10acef916c378c1c501"),
+	"title" : "Gone With The Wind",
+	"critic_rating" : 88,
+	"release_date" : {
+		"month" : 1,
+		"day" : 17,
+		"year" : 1940
+	},
+	"actors" : [
+		"Vivian Leigh",
+		"Gene Wilder"
+	],
+	"example_field" : "hey hey"
+}
+{
+	"_id" : ObjectId("6109e621cef916c378c1c504"),
+	"title" : "Requiem For a Dream",
+	"critic_rating" : 72,
+	"director" : "Darren Aronofsky",
+	"release_date" : {
+		"month" : 10,
+		"day" : 6,
+		"year" : 2000
+	}
+}
+{
+	"_id" : ObjectId("6109e636cef916c378c1c505"),
+	"title" : "Apocalypse Now",
+	"critic_rating" : 94,
+	"director" : "Francis Ford Coppola",
+	"release_date" : {
+		"month" : 8,
+		"day" : 15,
+		"year" : 1979
+	}
+}
+
+// using false, true at the end of the update function will update ALL docs in colleciton
+> db.movies.update({}, {$set: { example_field: 'hey hey' } }, false, true )
+WriteResult({ "nMatched" : 3, "nUpserted" : 0, "nModified" : 2 })
+> db.movies.find().pretty()
+{
+	"_id" : ObjectId("6109e10acef916c378c1c501"),
+	"title" : "Gone With The Wind",
+	"critic_rating" : 88,
+	"release_date" : {
+		"month" : 1,
+		"day" : 17,
+		"year" : 1940
+	},
+	"actors" : [
+		"Vivian Leigh",
+		"Gene Wilder"
+	],
+	"example_field" : "hey hey"
+}
+{
+	"_id" : ObjectId("6109e621cef916c378c1c504"),
+	"title" : "Requiem For a Dream",
+	"critic_rating" : 72,
+	"director" : "Darren Aronofsky",
+	"release_date" : {
+		"month" : 10,
+		"day" : 6,
+		"year" : 2000
+	},
+	"example_field" : "hey hey"
+}
+{
+	"_id" : ObjectId("6109e636cef916c378c1c505"),
+	"title" : "Apocalypse Now",
+	"critic_rating" : 94,
+	"director" : "Francis Ford Coppola",
+	"release_date" : {
+		"month" : 8,
+		"day" : 15,
+		"year" : 1979
+	},
+	"example_field" : "hey hey"
+}

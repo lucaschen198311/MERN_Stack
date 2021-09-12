@@ -1,0 +1,98 @@
+.header{
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+}
+.navBar{
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+}
+.container{
+    background-color: white;
+    margin:auto;
+    margin-bottom: 20px;;
+    width:65%;
+    padding:auto;
+}
+.petList{
+    margin:auto;
+    width:80%;
+    padding:auto;
+}
+.addPet{
+    margin:auto;
+    width:75%;
+    padding:auto;
+}
+.editPet{
+    margin:auto;
+    width:75%;
+    padding:auto;
+}
+.navLink{
+    margin: 30px 100px 0px 0px;
+}
+.link{
+    color:darkblue;
+}
+.displayBox{
+    border:2px solid black;
+    width:75%;
+    margin:auto;
+    padding:auto;
+    text-align: left;
+}
+.navTitle{
+    margin:0px 0px 30px 100px;
+}
+.adoptBtn{
+    background-color:red;
+    padding:5px;
+    width:200px;
+    color:white;
+    font-size: 16px;
+    box-shadow: 0 3px 3px 0 black;
+    margin: 0px 110px 0px 0px;
+}
+.displayItem{
+    margin-left: 30px;
+    font-weight: bold;
+}
+.skillItems{
+    margin: 0px 0px 50px 130px;
+}
+
+.skillItem{
+    margin:0px 5px;
+    font-weight: normal;
+}
+
+.likeBtn{
+    background-color:green;
+    padding:5px;
+    width:150px;
+    color:white;
+    font-size: 16px;
+    box-shadow: 0 3px 3px 0 black;
+    margin: 20px 0px 20px 100px;
+}
+
+#typeItem{
+    margin-left:55px;
+}
+#descriptionItem{
+    margin-left:30px;
+}
+h1{
+    margin-left:100px;
+}
+h2{
+    text-align: left;
+    margin-left: 15px;
+    font-weight: 200;
+}
+span{
+    font-weight: normal;
+    margin-left:50px;
+}

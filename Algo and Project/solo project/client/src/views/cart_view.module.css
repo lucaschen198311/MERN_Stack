@@ -1,0 +1,103 @@
+.header{
+    display:flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #2C394B;
+}
+
+.navbar span{
+    color: cornsilk;
+    margin-left: 20px;
+    font-style: italic;
+}
+
+.navbtn{
+    font: bold 16px Arial;
+    text-decoration: none;
+    background-color: lightgray;
+    color: black;
+    padding: 5px 10px;
+    margin: 15px 50px 0px 50px;
+    border-radius: 5px;
+}
+.navlink{
+    color:cornsilk;
+    margin: 20px;
+    font-size: 18px;
+}
+h1{
+    color:rgb(236, 84, 24);
+}
+
+.cartList{
+    margin:20px;
+}
+
+.cartFooter{
+    margin:20px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.actionBtn{
+    border-radius: 5px;
+    margin-left:10px;
+    font-weight: bold;
+    background-color: orange;
+}
+
+.orderBtn{
+    font: bold 14px Arial;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: orange;
+    color: #333333;
+    border-radius: 5px;
+    margin-right: 50px;
+    padding:5px 20px;
+    box-shadow: 3px 2px #888888;
+}
+
+.cancelBtn{
+    font: bold 14px Arial;
+    font-weight: bold;
+    text-decoration: none;
+    background-color:gainsboro;
+    color: #333333;
+    border-radius: 15px;
+    margin-right: 50px;
+    padding:5px 15px;
+}
+
+.footer{
+    align-items: center;
+    background-color: #2C394B;
+    height:50px;
+    padding:10px;
+}
+
+.foottext{
+    color:cornsilk;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  thead{
+      text-align: center;
+      background-color: #2C394B;
+      color:white;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {background-color: gainsboro;}
+
+  span{
+      font-weight: bold;
+  }

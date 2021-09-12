@@ -1,0 +1,11 @@
+{
+  "title": "Gone With The Wind",
+  "director": "Joe Schmo",
+  "critic_rating": 90,
+  "release_data": {
+    "month": 01,
+    "day": 17,
+    "year": 1940
+  },
+  "actors": ["Marilyn Monroe", "Vivian Leigh"]
+}

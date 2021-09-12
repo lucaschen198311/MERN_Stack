@@ -1,6 +1,55 @@
 ****************************************************************************************
 --Class video：
+https://hackmd.io/s7bBUvz2T1mpaOnvdRRqvQ
 https://www.youtube.com/channel/UCCBf2vuTbk8sD5tiAPwKEkQ
+https://www.youtube.com/playlist?list=PL3wNvVad2mw1XmGX-DCL-yf3DnA3Ei2dy --MERN combined
+
+--Welcome & ES6 Javascript Basics
+https://youtu.be/yC5xlIguHiI
+
+--First React App - Functional Components - Props - Styling
+https://youtu.be/7q7ZRPtozGU
+
+--Hooks / useState, Synthetic Events, Conditional Rendering
+https://youtu.be/MvP44EjE6bI
+
+--Forms - Lifting State - Front End Validations
+https://youtu.be/Ow4GoQsvs3s
+
+--Conditional Styling, Delete and More
+https://youtu.be/sBgiIIkT-zc
+
+--Promises, useEffect, Restful, APIs, Request / Response
+https://youtu.be/wD0c81rnhs0
+
+--Axios, Routing with Reach Router with StarWars API
+https://youtu.be/j0RySQLvU6Y
+
+--Intro to Backend Dev (Node/Express/Postman)
+https://youtu.be/p8Uhm3635K4
+
+--Mongoose, Mongo DB, Folder Structure, Full Backend
+https://youtu.be/BMynWas8GDQ
+
+--Full Stack Pt. 1 of 3 - Full Backend Server
+https://youtu.be/EADdDpd_8f4
+
+--Full Stack Pt. 2 of 3 - Frontend - Display All / Details / Create
+https://youtu.be/Q0tfYbfxI5g
+
+--Part 3 of 3 Start - The Front-end - CSS, Edit, Reusable Delete Component
+https://youtu.be/yhlibeQdJf0
+
+--OOP and JS Classes
+https://youtu.be/C1SVJXoEnnk
+
+--React Class Components
+https://youtu.be/nsGBUhN3mwk
+
+--MERN Auth - Registration, Login and Authenticated Routes
+https://youtu.be/TVU1SXFwQOM
+
+*************************************************************************************
 
 --React:
 https://reactjs.org/
@@ -104,6 +153,9 @@ https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
 
 --Http status code:
 https://http.cat/
+
+--MongoDB one to many relatioship between schemas:
+https://docs.mongodb.com/manual/tutorial/model-referenced-one-to-many-relationships-between-documents/
 
 *****************************************************************************************
 
@@ -3116,12 +3168,18 @@ function App() {
   // notice that we pass a callback function to initialize the socket
   // we don't need to destructure the 'setSocket' function since we won't be updating the socket state
   const [socket] = useState(() => io(':8000')); //io(":nodeServerPortNumberGoesRightHere")
+  const [messages, setMessages] = useState([]);
  
   useEffect(() => {
     // we need to set up all of our event listeners
     // in the useEffect callback function
     console.log('Is this running?');
-    socket.on('Welcome', data => console.log(data));
+    //socket.on('Welcome', data => console.log(data));
+	socket.on('new_message_from_server', msg=>{
+		setMessages(prevMessages=>{
+			return [msg, ...prevMessages]
+		})
+	})
  
     // note that we're returning a callback function
     // this ensures that the underlying socket will be closed if App is unmounted
@@ -3140,3 +3198,143 @@ export default App;
 
 
 --------------------------------------------Web Sockets-----------------------------------------
+
+
+---------------------------------------------How to Pagination----------------------------------
+
+https://academind.com/tutorials/reactjs-pagination
+
+--->Post component which will present a single post.
+
+function Post(props) {
+  const { id, title, body } = props.data;
+  return (
+    <div className="post">
+      <small>{id}</small>
+      <h1>{title}</h1>
+      <p>{body}</p>
+    </div>
+  );
+}
+
+--->Implementing Pagination
+
+function Pagination({ data, RenderComponent, title, pageLimit, dataLimit }) {
+  const [pages] = useState(Math.round(data.length / dataLimit));
+  const [currentPage, setCurrentPage] = useState(1);
+
+  function goToNextPage() {
+     setCurrentPage((page) => page + 1);
+  }
+
+  function goToPreviousPage() {
+     setCurrentPage((page) => page - 1);
+  }
+
+  function changePage(event) {
+     const pageNumber = Number(event.target.textContent);
+	 setCurrentPage(pageNumber);
+  }
+
+  const getPaginatedData = () => {
+     const startIndex = currentPage * dataLimit - dataLimit;
+	 const endIndex = startIndex + dataLimit;
+     return data.slice(startIndex, endIndex);
+  };
+
+  const getPaginationGroup = () => {
+     let start = Math.floor((currentPage - 1) / pageLimit) * pageLimit;
+	 return new Array(pageLimit).fill().map((_, idx) => start + idx + 1);
+  };
+
+  return (
+    <div>
+    <h1>{title}</h1>
+
+    {/* show the posts, 10 posts at a time */}
+    <div className="dataContainer">
+      {getPaginatedData().map((d, idx) => (
+        <RenderComponent key={idx} data={d} />
+      ))}
+    </div>
+
+    {/* show the pagiantion
+        it consists of next and previous buttons
+        along with page numbers, in our case, 5 page
+        numbers at a time
+    */}
+    <div className="pagination">
+      {/* previous button */}
+      <button
+        onClick={goToPreviousPage}
+        className={`prev ${currentPage === 1 ? 'disabled' : ''}`}
+      >
+        prev
+      </button>
+
+      {/* show page numbers */}
+      {getPaginationGroup().map((item, index) => (
+        <button
+          key={index}
+          onClick={changePage}
+          className={`paginationItem ${currentPage === item ? 'active' : null}`}
+        >
+          <span>{item}</span>
+        </button>
+      ))}
+
+      {/* next button */}
+      <button
+        onClick={goToNextPage}
+        className={`next ${currentPage === pages ? 'disabled' : ''}`}
+      >
+        next
+      </button>
+    </div>
+  </div>
+  );
+}
+
+/*
+data: An array of data that should be shown in the paginated form
+RenderComponent: A component that should be used to show the paginated data. In our case, this will the the Post component that we created earlier.
+title: This is the title that should describe what the data is about. In our case, it will be the Posts
+dataLimit: The number of posts to be shown on each page. In our case, it will be 10.
+pageLimit: The number of pages to be shown in the pagination. In our case, it will be 5 pages at a time.
+We will save 2 things in our state:
+
+pages: The total number of pages. This will be calculated by dividing the length of the data array that will be passed to this component as a prop, by the dataLimit which is the number of posts we will show on each page. We also need to round off the result of this division.
+currentPage: This is the current page that the user is currently visiting. The initial value will be
+*/
+
+
+--->Using the Pagination Component
+
+export default function App() {
+  const [posts, setPosts] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    ...
+  }, []);
+
+  if (error) return <h1>{error}</h1>;
+
+  return (
+    <div>
+      {posts.length > 0 ? (
+        <>
+          <Pagination
+            data={posts}
+            RenderComponent={Post}
+            title="Posts"
+            pageLimit={5}
+            dataLimit={10}
+          />
+        </>
+      ) : (
+       <h1>No Posts to display</h1>
+      )}
+    </div>
+  );
+}

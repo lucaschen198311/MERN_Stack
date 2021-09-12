@@ -1,0 +1,112 @@
+.header{
+    display:flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #2C394B;
+    height:70px;
+    margin-bottom: 10px;
+}
+
+.footer{
+    align-items: center;
+    background-color: #2C394B;
+    height:50px;
+    padding:10px;
+    margin-top: 20px;
+}
+
+.navbar span{
+    color: cornsilk;
+    margin-left: 20px;
+    font-style: italic;
+}
+
+.cartTotal{
+    color:white;
+    font-weight: bold;
+    margin-right:30px;
+    margin-left:0px;
+    border:1px solid orange;
+    border-radius: 50%;
+    position: relative;
+    background-color: orange;
+    padding:0px 5px;
+}
+
+.navbtn{
+    font: bold 16px Arial;
+    text-decoration: none;
+    background-color: lightgray;
+    color: black;
+    padding: 5px 10px;
+    margin: 15px 50px 0px 50px;
+    border-radius: 5px;
+}
+.navlink{
+    color:cornsilk;
+    margin: 20px;
+    font-size: 18px;
+}
+h1{
+    color:rgb(236, 84, 24);
+    margin-bottom:20px;
+}
+h2{
+    color:coral;
+    text-align: left;
+    margin:20px 20px 0px 45px;
+}
+h3{
+    font-size: 16px;
+    margin:15px 5px;
+}
+
+.foottext{
+    color:cornsilk;
+}
+
+.orderList{
+    margin:0px 20px 20px 20px;
+    padding:10px;
+    text-align: left;
+}
+
+.orderTableList{
+    margin:10px;
+    padding:5px;
+}
+
+.orderTableHeader{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  thead{
+      text-align: center;
+      background-color: #6E85B2;
+      color:white;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {background-color: #F3F1F5}
+
+  .recallBtn{
+    font: bold 12px Arial;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: #FF884B;
+    color: #FFEFA1;
+    border-radius: 10px;
+    margin-right: 20px;
+    padding:5px 10px;
+    border:2px solid black;
+    box-shadow: 5px 5px darkgray;
+  }
