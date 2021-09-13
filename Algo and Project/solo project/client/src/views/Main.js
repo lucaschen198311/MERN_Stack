@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {Link} from "@reach/router";
 import styles from './main_home_admin_view.module.css';
+import Pagination from '../components/Pagination';
+
 const Main = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("all");
@@ -40,7 +42,19 @@ const Main = () => {
             <option value="not known">not known</option>
           </select>
         </div>
-        <div className={styles.main}>
+        <Pagination products={products} pageLimit={3} dataLimit={6} pageType={"Main"} />
+        <div className={styles.footer}>
+            <Link className={styles.footlink} to={"/login"}>Login</Link>
+            <Link className={styles.footlink} to={"/register"}>Register</Link>
+            <p className={styles.foottext}>Copyright@2021</p>
+        </div>
+    </div>
+  );
+};
+export default Main;
+
+/*
+<div className={styles.main}>
         {products &&
           products.map((product, index) => (
             <div className={styles.mainCard} key={index}>
@@ -51,12 +65,4 @@ const Main = () => {
             </div>
           ))}
         </div>
-        <div className={styles.footer}>
-            <Link className={styles.footlink} to={"/login"}>Login</Link>
-            <Link className={styles.footlink} to={"/register"}>Register</Link>
-            <p className={styles.foottext}>Copyright@2021</p>
-        </div>
-    </div>
-  );
-};
-export default Main;
+*/

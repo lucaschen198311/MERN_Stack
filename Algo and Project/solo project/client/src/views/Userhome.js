@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {Link, navigate} from "@reach/router";
 import styles from './main_home_admin_view.module.css';
+import Pagination from '../components/Pagination';
+
 const Userhome = () => {
   const [products, setProducts] = useState([]);
   const [items, setItems] = useState([]);
@@ -67,6 +69,7 @@ const Userhome = () => {
     navigate("/")
   };
 
+  /*
   const handleAddToCart = async(e,product_id)=>{
     e.preventDefault();
     try{
@@ -78,7 +81,7 @@ const Userhome = () => {
         console.log(error);
     }
   }
- 
+ */
   return (
     <div>
         <div className={styles.header}>
@@ -106,7 +109,18 @@ const Userhome = () => {
             <option value="not known">not known</option>
           </select>
         </div>
-        <div className={styles.main}>
+        <Pagination products={products} pageLimit={3} dataLimit={6} pageType={"Home"} 
+          user={user} setUser={setUser} clickadd={clickadd} setClickadd={setClickadd}/>
+        <div className={styles.footer}>
+            <p className={styles.foottext}>Copyright@2021</p>
+        </div>
+    </div>
+  );
+};
+export default Userhome;
+
+/*
+<div className={styles.main}>
         {products &&
           products.map((product, index) => (
             <div className={styles.card} key={index}>
@@ -121,11 +135,4 @@ const Userhome = () => {
             </div>
           ))}
         </div>
-        <div className={styles.footer}>
-            <p className={styles.foottext}>Copyright@2021</p>
-        </div>
-    </div>
-  );
-};
-export default Userhome;
-
+*/
