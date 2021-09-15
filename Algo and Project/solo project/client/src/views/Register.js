@@ -11,6 +11,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState([]);
+  //const [backendErr, setBackendErr] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     const postData = {
@@ -25,7 +26,18 @@ const Register = () => {
       await axios.post("http://localhost:8000/api/register", postData);
       navigate("/login");
     } catch (err) {
-      setErrors(err.response.data.errors);
+      if(err.response.data.error){
+        setErrors({
+          firstName:null,
+          lastName: null,
+          userName: {message:err.response.data.error},
+          email: {message:err.response.data.error},
+          password: null,
+          confirmPassword:null
+        })
+      }else{
+        setErrors(err.response.data.errors);
+      }
     }
   };
   return (
@@ -35,32 +47,32 @@ const Register = () => {
         <div className={styles.input}>
           <label>First Name: </label>
           <input name="firstName" type="text" onChange={(e) => setFirstName(e.target.value)} />
-          { errors.firstName ? <p className={styles.warning}>{errors.firstName.message}</p>: null}
+          { errors.firstName && <p className={styles.warning}>{errors.firstName.message}</p>}
         </div>
         <div className={styles.input}>
           <label>Last Name: </label>
           <input name="lastName" type="text" onChange={(e) => setLastName(e.target.value)} />
-          { errors.lastName ? <p className={styles.warning}>{errors.lastName.message}</p>: null}
+          { errors.lastName && <p className={styles.warning}>{errors.lastName.message}</p>}
         </div>
         <div className={styles.input}>
           <label>Username: </label>
           <input name="userName" type="text" onChange={(e) => setUserName(e.target.value)} />
-          { errors.userName ? <p className={styles.warning}>{errors.userName.message}</p>: null}
+          { errors.userName  && <p className={styles.warning}>{errors.userName.message}</p>}
         </div>
         <div className={styles.input}>
           <label>Email: </label>
           <input name="email" type="text" onChange={(e) => setEmail(e.target.value)} />
-          { errors.email ? <p className={styles.warning}>{errors.email.message}</p>: null}
+          { errors.email && <p className={styles.warning}>{errors.email.message}</p>}
         </div>
         <div className={styles.input}>
           <label>Password: </label>
           <input name="password" type="text" onChange={(e) => setPassword(e.target.value)} />
-          { errors.password ? <p className={styles.warning}>{errors.password.message}</p>: null}
+          { errors.password  && <p className={styles.warning}>{errors.password.message}</p>}
         </div>
         <div className={styles.input}>
           <label>Confirm Password: </label>
           <input name="confirmPassword" type="text" onChange={(e) => setConfirmPassword(e.target.value)} />
-          { errors.confirmPassword ? <p className={styles.warning}>{errors.confirmPassword.message}</p>: null}
+          { errors.confirmPassword  && <p className={styles.warning}>{errors.confirmPassword.message}</p>}
         </div>
         <button className={styles.btn} type="submit">Register</button>
         <Link className={styles.link} to={"/"}>Cancel</Link>

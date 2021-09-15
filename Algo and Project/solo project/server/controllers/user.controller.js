@@ -7,7 +7,7 @@ const register = async (req, res, next) => {
   // pull body off of req
   const { body } = req;
   try {
-    const queriedUser = await User.findOne({ email: body.userName });
+    const queriedUser = await User.findOne({$or: [{ email: body.email }, { userName: body.userName }]});
     // if a user is found with this email, we must notify the client so the user can enter a different email address
     // this is the basics of registration... an email can only be used by one user
     if (queriedUser) {
@@ -50,7 +50,7 @@ const login = async (req, res, next) => {
   const passwordCheck = bcrypt.compareSync(body.password, userQuery.password);
   // if passwordCheck is false...
   if (!passwordCheck) {
-    res.status(400).json({ error: "User or password does not match" });
+    res.status(400).json({ err: "User or password does not match" });
     return;
   }
   // Getting to this block of code means 1. the email was found in db and
